@@ -1,0 +1,65 @@
+#include <SoftwareSerial.h>
+
+// Bluetooth modülü için TX ve RX pinleri
+const int bluetooth_TX = 10;
+const int bluetooth_RX = 11;
+
+// Joystick ve buton pinleri
+const int joystick1_X = A0;
+const int joystick1_Y = A1;
+const int button1 = 2; // Buton 1
+const int button2 = 3; // Buton 2
+
+// Threshold değeri (joystick hassasiyeti için)
+const int threshold = 200;
+
+// Bluetooth haberleşmesi
+SoftwareSerial bluetooth(bluetooth_TX, bluetooth_RX);
+
+void setup() {
+  bluetooth.begin(9600);  // Bluetooth haberleşmesini başlat
+  Serial.begin(9600);     // Seri monitör
+
+  pinMode(button1, INPUT_PULLUP); // Buton 1 için INPUT_PULLUP
+  pinMode(button2, INPUT_PULLUP); // Buton 2 için INPUT_PULLUP
+
+  Serial.println("Verici Arduino Başladı");
+}
+
+void loop() {
+  // Joystick 1 verileri
+  int joy1_X = analogRead(joystick1_X);
+  int joy1_Y = analogRead(joystick1_Y);
+
+  // Buton durumları
+  int btn1State = digitalRead(button1); // Buton 1 durumu
+  int btn2State = digitalRead(button2); // Buton 2 durumu
+
+  // Joystick Yönlerine Göre Veri Gönder
+  if (joy1_Y > 512 + threshold) {
+    bluetooth.println("A"); // İleri
+    Serial.println("A - Joystick 1 İleri");
+  } else if (joy1_Y < 512 - threshold) {
+    bluetooth.println("B"); // Geri
+    Serial.println("B - Joystick 1 Geri");
+  } else if (joy1_X > 512 + threshold) {
+    bluetooth.println("C"); // Sağ
+    Serial.println("C - Joystick 1 Sağ");
+  } else if (joy1_X < 512 - threshold) {
+    bluetooth.println("D"); // Sol
+    Serial.println("D - Joystick 1 Sol");
+  }
+
+  // Butonlara Göre Veri Gönder
+  if (btn1State == LOW) { // Buton 1'e basılmışsa
+    bluetooth.println("E");
+    Serial.println("E - Buton 1 Basıldı");
+  }
+
+  if (btn2State == LOW) { // Buton 2'ye basılmışsa
+    bluetooth.println("F");
+    Serial.println("F - Buton 2 Basıldı");
+  }
+
+  delay(100); // Gecikme
+}
