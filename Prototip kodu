@@ -1,0 +1,81 @@
+// Not: Pinoo daki bluteuth yerine HC05 bağlayacağız doğru değil mi?
+// Pinoo da hangi pinlerin nereye bağlandığını bilmediğim için rastgele pin numarası verdim
+// Pinoo daki hangi pinlere bağlayacağımızı yazarsanız ve koddaki küçük hataları da düzeltirseniz çok memnun oluruz .
+
+
+
+
+// Joystick ve buton pinleri
+
+const int joystick1_X = A0;
+const int joystick1_Y = A1;
+const int joystick2_X = A2;
+const int joystick2_Y = A3;
+const int button1 = 2; // Buton 1
+const int button2 = 3; // Buton 2
+
+// Threshold değeri (joystick hassasiyeti için)
+const int threshold = 200;
+
+
+/////////////////////void setup 
+ pinMode(button1, INPUT_PULLUP); // Buton 1 için INPUT_PULLUP
+  pinMode(button2, INPUT_PULLUP); // Buton 2 için INPUT_PULLUP
+
+
+void loop() {
+  int joy1_X = analogRead(joystick1_X);
+  int joy1_Y = analogRead(joystick1_Y);
+  int joy2_X = analogRead(joystick2_X);
+  int joy2_Y = analogRead(joystick2_Y);
+
+  // Joystick Yönlerine Göre Veri Gönder
+
+  if (joy1_Y > 512 + threshold) {
+  // İleri
+    Serial.println("a");
+
+  } else if (joy1_Y < 512 - threshold) {
+   // Geri
+    Serial.println("d");
+
+  } else if (joy1_X > 512 + threshold) {
+    // Sağ
+    Serial.println("c");
+
+  } else if (joy1_X < 512 - threshold) {
+   // Sol
+    Serial.println("b");
+  }
+
+//////////////////////////////////////////////////////////////////////////
+if (joy2_Y > 512 + threshold) {
+  // İleri
+    Serial.println("a");
+
+  } else if (joy2_Y < 512 - threshold) {
+   // Geri
+    Serial.println("d");
+
+  } else if (joy2_X > 512 + threshold) {
+    // Sağ
+    Serial.println("c");
+
+  } else if (joy2_X < 512 - threshold) {
+   // Sol
+    Serial.println("b");
+  }
+
+  // Butonlara Göre Veri Gönder
+  if (btn1State == LOW) { // Buton 1'e basılmışsa
+    Serial.println("i");
+  }
+
+  if (btn2State == LOW) { // Buton 2'ye basılmışsa
+    Serial.println("j");
+  }
+
+  delay(100); // Gecikme
+}
+
+ 
